@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statVariety.textContent = `${evalRes.varietyCount} / 4`;
 
-        // Crack Times
+        
         crackOnline.textContent = evalRes.crackTimes.online;
         crackFastOnline.textContent = evalRes.crackTimes.fastOnline;
         crackOfflineGpu.textContent = evalRes.crackTimes.offlineGpu;
