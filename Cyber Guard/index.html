@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard - Phishing Detector & Password Strength Analyzer</title>
+    <meta name="description" content="Advanced cybersecurity suite featuring real-time URL & email phishing analysis, password strength evaluation, entropy calculation, and password generator.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="grid-overlay"></div>
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>CyberGuard <span class="badge-pro">PRO</span></h1>
+                    <p class="tagline">Phishing Threat Detector & Password Security Analyzer</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-indicator" id="systemStatus">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text">SHIELD ACTIVE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Navigation Tabs -->
+        <nav class="main-tabs" role="tablist">
+            <button class="tab-btn active" id="tab-phishing-btn" data-tab="phishing-tab" role="tab" aria-selected="true">
+                <i class="fa-solid fa-magnifying-glass-location"></i>
+                <span>Phishing Detector</span>
+            </button>
+            <button class="tab-btn" id="tab-password-btn" data-tab="password-tab" role="tab" aria-selected="false">
+                <i class="fa-solid fa-key"></i>
+                <span>Password Analyzer</span>
+            </button>
+            <button class="tab-btn" id="tab-quiz-btn" data-tab="quiz-tab" role="tab" aria-selected="false">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Phishing Simulator</span>
+            </button>
+        </nav>
+
+        <!-- Main Content Wrapper -->
+        <main class="content-area">
+            
+            <!-- SECTION 1: PHISHING DETECTOR -->
+            <section class="tab-content active" id="phishing-tab" role="tabpanel">
+                <div class="subnav">
+                    <button class="subtab-btn active" id="subtab-url" data-subnav="url-scanner">
+                        <i class="fa-solid fa-link"></i> URL Safety Scanner
+                    </button>
+                    <button class="subtab-btn" id="subtab-email" data-subnav="email-analyzer">
+                        <i class="fa-solid fa-envelope-open-text"></i> Email & Message Analyzer
+                    </button>
+                </div>
+
+                <!-- SUBSECTION: URL SCANNER -->
+                <div class="subcontent active" id="url-scanner">
+                    <div class="scanner-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-globe"></i>
+                                <h2>Real-Time URL Phishing & Threat Inspector</h2>
+                            </div>
+                            <p>Enter any web address to analyze its domain age heuristics, typosquatting indicators, SSL, TLD risks, and brand spoofing patterns.</p>
+                        </div>
+
+                        <div class="input-section">
+                            <div class="url-input-group">
+                                <div class="input-icon"><i class="fa-solid fa-link"></i></div>
+                                <input type="url" id="urlInput" placeholder="https://example-security-verify.com/login" autocomplete="off" spellcheck="false">
+                                <button id="scanUrlBtn" class="primary-btn">
+                                    <i class="fa-solid fa-radar"></i> Analyze URL
+                                </button>
+                            </div>
+
+                            <div class="preset-chips">
+                                <span class="chip-label">Try sample URLs:</span>
+                                <button class="preset-btn safe" data-url="https://www.google.com/account/security">
+                                    <i class="fa-solid fa-circle-check"></i> Legitimate Bank / Google
+                                </button>
+                                <button class="preset-btn warning" data-url="http://192.168.1.55/paypal-update/login.php">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> IP Host & HTTP
+                                </button>
+                                <button class="preset-btn danger" data-url="http://paypa1-security-verify.account-update.xyz/login?session=93821">
+                                    <i class="fa-solid fa-bug"></i> Typosquatting Phish (.xyz)
+                                </button>
+                                <button class="preset-btn danger" data-url="http://appleid.apple.com.verify-billing-notice.top/signin">
+                                    <i class="fa-solid fa-skull"></i> Subdomain Impersonation
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Scan Results Container -->
+                        <div class="results-container hidden" id="urlResults">
+                            <div class="results-grid">
+                                <!-- Left Column: Risk Meter & Score -->
+                                <div class="score-card">
+                                    <div class="gauge-wrapper">
+                                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                                            <circle class="gauge-bg" cx="100" cy="100" r="85"></circle>
+                                            <circle class="gauge-fill" id="urlGaugeFill" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="534"></circle>
+                                        </svg>
+                                        <div class="gauge-inner">
+                                            <span class="score-number" id="urlRiskScore">0</span>
+                                            <span class="score-max">/ 100</span>
+                                            <span class="score-label">THREAT SCORE</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="verdict-badge-container">
+                                        <span class="verdict-badge" id="urlVerdict">SAFE</span>
+                                    </div>
+                                    <p class="verdict-summary" id="urlSummaryText">Analyzing URL structures...</p>
+                                    
+                                    <div class="quick-meta-list">
+                                        <div class="meta-item">
+                                            <span class="meta-label">Protocol:</span>
+                                            <span class="meta-val" id="metaProtocol">-</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Host Domain:</span>
+                                            <span class="meta-val" id="metaDomain">-</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">TLD Risk:</span>
+                                            <span class="meta-val" id="metaTLD">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: Detailed Security Heuristics -->
+                                <div class="details-card">
+                                    <h3><i class="fa-solid fa-shield-virus"></i> Heuristic Threat Evaluation</h3>
+                                    <div class="heuristics-list" id="urlHeuristicsList">
+                                        <!-- Dynamic items populated by phishing.js -->
+                                    </div>
+
+                                    <div class="recommendation-box" id="urlRecommendations">
+                                        <h4><i class="fa-solid fa-lightbulb"></i> Security Recommendation</h4>
+                                        <p id="urlRecText">No issues detected. Always ensure HTTPS is active before typing sensitive passwords.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBSECTION: EMAIL ANALYZER -->
+                <div class="subcontent" id="email-analyzer">
+                    <div class="scanner-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-file-shield"></i>
+                                <h2>Phishing Email & Text Content Inspector</h2>
+                            </div>
+                            <p>Paste suspicious email text, headers, or SMS messages to detect urgency triggers, authority pressure, fake sender indicators, and malicious links.</p>
+                        </div>
+
+                        <div class="input-section">
+                            <div class="textarea-wrapper">
+                                <textarea id="emailInput" rows="6" placeholder="Paste email body or SMS message here... (e.g. URGENT: Your bank account will be suspended in 24 hours. Click here to verify your identity now...)"></textarea>
+                            </div>
+                            
+                            <div class="email-tools-bar">
+                                <div class="preset-chips">
+                                    <span class="chip-label">Load Samples:</span>
+                                    <button class="preset-btn danger" id="samplePhishEmail1">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Fake Bank Urgent Alert
+                                    </button>
+                                    <button class="preset-btn danger" id="samplePhishEmail2">
+                                        <i class="fa-solid fa-gift"></i> Prize & Gift Card Scam
+                                    </button>
+                                    <button class="preset-btn safe" id="sampleSafeEmail">
+                                        <i class="fa-solid fa-circle-check"></i> Standard Team Notification
+                                    </button>
+                                </div>
+
+                                <button id="analyzeEmailBtn" class="primary-btn">
+                                    <i class="fa-solid fa-microscope"></i> Analyze Text
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Email Scan Results -->
+                        <div class="results-container hidden" id="emailResults">
+                            <div class="results-grid">
+                                <div class="score-card">
+                                    <div class="score-circle-wrapper">
+                                        <div class="score-ring" id="emailScoreRing">
+                                            <span class="score-number" id="emailRiskScore">0</span>
+                                            <span class="score-max">/ 100</span>
+                                        </div>
+                                    </div>
+                                    <div class="verdict-badge-container">
+                                        <span class="verdict-badge" id="emailVerdict">SAFE</span>
+                                    </div>
+                                    <p class="verdict-summary" id="emailSummaryText">Evaluating message indicators...</p>
+                                </div>
+
+                                <div class="details-card">
+                                    <h3><i class="fa-solid fa-list-check"></i> Detected Phishing Indicators</h3>
+                                    <div class="email-indicators-list" id="emailIndicatorsList">
+                                        <!-- Dynamic email findings -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- SECTION 2: PASSWORD ANALYZER & GENERATOR -->
+            <section class="tab-content" id="password-tab" role="tabpanel">
+                <div class="password-suite-grid">
+                    
+                    <!-- LEFT COLUMN: Password Strength Inspector -->
+                    <div class="glass-card analyzer-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-gauge-high"></i>
+                                <h2>Password Strength Evaluator</h2>
+                            </div>
+                            <p>Real-time entropy measurement ($\log_2 R^N$), pattern deduction, dictionary check, and crack-time simulation.</p>
+                        </div>
+
+                        <div class="pwd-input-container">
+                            <div class="input-with-action">
+                                <input type="password" id="pwdInput" placeholder="Type or paste a password to analyze..." autocomplete="new-password">
+                                <button class="icon-toggle-btn" id="togglePwdVisibility" title="Toggle Visibility">
+                                    <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
+
+                            <!-- Preset Passwords for testing -->
+                            <div class="preset-chips">
+                                <span class="chip-label">Test Samples:</span>
+                                <button class="preset-btn danger pwd-sample-btn" data-pwd="password123">
+                                    Weak (123)
+                                </button>
+                                <button class="preset-btn warning pwd-sample-btn" data-pwd="Dragon2024!">
+                                    Medium (Dragon)
+                                </button>
+                                <button class="preset-btn safe pwd-sample-btn" data-pwd="9#xK2!mQ$8vLz@1pW">
+                                    Strong (Complex)
+                                </button>
+                                <button class="preset-btn safe pwd-sample-btn" data-pwd="correct-horse-battery-staple">
+                                    Passphrase
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Strength Meter Bar -->
+                        <div class="strength-meter-section">
+                            <div class="meter-labels">
+                                <span class="label-title">Strength Rating:</span>
+                                <span class="meter-badge" id="pwdRatingBadge">ENTERING PASSWORD...</span>
+                            </div>
+                            <div class="meter-track">
+                                <div class="meter-bar" id="pwdStrengthBar"></div>
+                            </div>
+                        </div>
+
+                        <!-- Realtime Stats Grid -->
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="statEntropy">0 bits</span>
+                                    <span class="stat-lbl">Shannon Entropy</span>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon"><i class="fa-solid fa-ruler-horizontal"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="statLength">0 chars</span>
+                                    <span class="stat-lbl">Length</span>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="statBreach">SAFE</span>
+                                    <span class="stat-lbl">Breach DB Check</span>
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="statVariety">0 / 4</span>
+                                    <span class="stat-lbl">Character Variety</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time to Crack Table -->
+                        <div class="crack-time-card">
+                            <h3><i class="fa-solid fa-stopwatch"></i> Estimated Time to Crack</h3>
+                            <div class="crack-grid">
+                                <div class="crack-item">
+                                    <span class="scenario-name"><i class="fa-solid fa-globe"></i> Online Throttled (100 req/s)</span>
+                                    <span class="time-val" id="crackOnline">Instant</span>
+                                </div>
+                                <div class="crack-item">
+                                    <span class="scenario-name"><i class="fa-solid fa-server"></i> Online Unthrottled (10k req/s)</span>
+                                    <span class="time-val" id="crackFastOnline">Instant</span>
+                                </div>
+                                <div class="crack-item">
+                                    <span class="scenario-name"><i class="fa-solid fa-microchip"></i> Offline Fast GPU (100B req/s)</span>
+                                    <span class="time-val" id="crackOfflineGpu">Instant</span>
+                                </div>
+                                <div class="crack-item highlight">
+                                    <span class="scenario-name"><i class="fa-solid fa-network-wired"></i> Quantum / Rig Array (10T req/s)</span>
+                                    <span class="time-val" id="crackQuantum">Instant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback and Recommendations -->
+                        <div class="feedback-card">
+                            <h3><i class="fa-solid fa-shield-cat"></i> Password Checklist & Improvements</h3>
+                            <ul class="checklist" id="pwdChecklist">
+                                <!-- Dynamic check items -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Secure Password Generator -->
+                    <div class="glass-card generator-card">
+                        <div class="card-header">
+                            <div class="header-title">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <h2>Secure Password Generator</h2>
+                            </div>
+                            <p>Generate high-entropy random passwords or memorable NIST-compliant passphrases.</p>
+                        </div>
+
+                        <!-- Mode Selector Switcher -->
+                        <div class="gen-mode-toggle">
+                            <button class="mode-btn active" id="genModeRandom" data-genmode="random">
+                                <i class="fa-solid fa-shuffle"></i> Random Password
+                            </button>
+                            <button class="mode-btn" id="genModePassphrase" data-genmode="passphrase">
+                                <i class="fa-solid fa-font"></i> Memorable Passphrase
+                            </button>
+                        </div>
+
+                        <!-- Generated Output Box -->
+                        <div class="gen-output-box">
+                            <div class="output-text" id="genOutputText">Click Generate</div>
+                            <button class="copy-btn" id="copyGenBtn" title="Copy to Clipboard">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <!-- Controls Panel for Random Password -->
+                        <div class="gen-controls" id="randomGenControls">
+                            <div class="control-row">
+                                <div class="control-label">
+                                    <span>Password Length:</span>
+                                    <strong id="genLengthVal">18</strong>
+                                </div>
+                                <input type="range" id="genLengthRange" min="8" max="64" value="18">
+                            </div>
+
+                            <div class="options-grid">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="chkUpper" checked>
+                                    <span class="custom-chk"></span>
+                                    <span>Uppercase (A-Z)</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="chkLower" checked>
+                                    <span class="custom-chk"></span>
+                                    <span>Lowercase (a-z)</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="chkNumbers" checked>
+                                    <span class="custom-chk"></span>
+                                    <span>Numbers (0-9)</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="chkSymbols" checked>
+                                    <span class="custom-chk"></span>
+                                    <span>Symbols (!@#$)</span>
+                                </label>
+                                <label class="checkbox-label full-width">
+                                    <input type="checkbox" id="chkAmbiguous">
+                                    <span class="custom-chk"></span>
+                                    <span>Avoid Ambiguous Characters (l, 1, I, O, 0)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Controls Panel for Passphrase -->
+                        <div class="gen-controls hidden" id="passphraseGenControls">
+                            <div class="control-row">
+                                <div class="control-label">
+                                    <span>Word Count:</span>
+                                    <strong id="phraseWordsVal">4 words</strong>
+                                </div>
+                                <input type="range" id="phraseWordsRange" min="3" max="8" value="4">
+                            </div>
+
+                            <div class="control-row">
+                                <div class="control-label">
+                                    <span>Separator:</span>
+                                </div>
+                                <select id="phraseSeparatorSelect" class="custom-select">
+                                    <option value="-">Hyphen (-)</option>
+                                    <option value="_">Underscore (_)</option>
+                                    <option value=".">Period (.)</option>
+                                    <option value=" ">Space ( )</option>
+                                </select>
+                            </div>
+
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chkPhraseCapitalize" checked>
+                                <span class="custom-chk"></span>
+                                <span>Capitalize First Letters</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chkPhraseNumber" checked>
+                                <span class="custom-chk"></span>
+                                <span>Include Random Number</span>
+                            </label>
+                        </div>
+
+                        <button id="generateBtn" class="primary-btn action-btn">
+                            <i class="fa-solid fa-arrows-rotate"></i> Generate New Password
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- SECTION 3: PHISHING SIMULATOR & QUIZ -->
+            <section class="tab-content" id="quiz-tab" role="tabpanel">
+                <div class="glass-card quiz-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <i class="fa-solid fa-user-ninja"></i>
+                            <h2>Interactive Phishing Spotter Simulator</h2>
+                        </div>
+                        <p>Can you tell legitimate communications from dangerous phishing scams? Test your cyber security awareness!</p>
+                    </div>
+
+                    <div class="quiz-status-bar">
+                        <div class="quiz-score-box">
+                            <span class="lbl">Score:</span>
+                            <span class="val" id="quizScoreVal">0</span>
+                        </div>
+                        <div class="quiz-streak-box">
+                            <span class="lbl">Current Streak:</span>
+                            <span class="val" id="quizStreakVal">🔥 0</span>
+                        </div>
+                        <div class="quiz-progress-box">
+                            <span class="lbl">Question:</span>
+                            <span class="val" id="quizProgressVal">1 / 5</span>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Question Card Container -->
+                    <div class="scenario-display-card" id="quizScenarioCard">
+                        <div class="scenario-header">
+                            <span class="scenario-badge" id="scenarioCategory">EMAIL SCENARIO</span>
+                            <h3 id="scenarioTitle">Suspicious Security Alert</h3>
+                        </div>
+
+                        <div class="email-mock-preview">
+                            <div class="email-meta-bar">
+                                <div class="meta-row"><strong>From:</strong> <span id="mockSender">security-alert@service-update-account.com</span></div>
+                                <div class="meta-row"><strong>To:</strong> <span>user@organization.com</span></div>
+                                <div class="meta-row"><strong>Subject:</strong> <span id="mockSubject">URGENT: Password Reset Required</span></div>
+                            </div>
+                            <div class="email-body-content" id="mockBody">
+                                Dear user, we noticed unusual login attempts on your account. Please click the link below within 24 hours to secure your credentials.
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="quiz-choice-buttons">
+                            <button class="choice-btn phish" id="choosePhishBtn">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Mark as PHISHING SCAM
+                            </button>
+                            <button class="choice-btn legit" id="chooseLegitBtn">
+                                <i class="fa-solid fa-circle-check"></i> Mark as LEGITIMATE
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Feedback Dialog -->
+                    <div class="quiz-feedback-box hidden" id="quizFeedbackBox">
+                        <div class="feedback-header" id="feedbackHeader">
+                            <i class="fa-solid fa-circle-check"></i> CORRECT!
+                        </div>
+                        <p id="feedbackExplanation">Good eye! The sender domain does not match the official organization.</p>
+                        <button class="primary-btn" id="nextQuestionBtn">
+                            Next Scenario <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>CyberGuard Security Suite &copy; 2026. Built with HTML5, CSS3, & ES6 JavaScript.</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast hidden" id="toast">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toastMsg">Action completed</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="phishing.js"></script>
+    <script src="password.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
