@@ -1,7 +1,4 @@
-/**
- * CYBERGUARD APPLICATION CONTROLLER
- * Connects UI interactions, DOM events, PhishingEngine, and PasswordEngine
- */
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
